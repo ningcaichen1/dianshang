@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/js/lib/jquery2.2.4/jquery-2.2.4.min.js"></script>
+    <script src="/static/js/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+<body>
+<div class="container">
+    <div id="logo_head">
+        <p>13.29</p>
+    </div>
+    <div id="logo-middle">
+        <div style="color:red;width:120px;height:25px;background-color:#888888;float:Left">{{msg}}</div>
+        <form class = "form-horizontal" action="/blog/register/" method="post">
+            {% csrf_token %}
+            <a href="/blog/login_3/">登录</a>
+            <p>.</p>
+            <a href="/blog/register/">注册</a>
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-user"></i></span>
+                <input type="text" class="form-control" name="nickname" placeholder="您的昵称" aria-describedby="sizing-addon1">
+            </div>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-erase"></i></span>
+                <input type="text" class="form-control" name="tel" placeholder="手机号" aria-describedby="sizing-addon1">
+            </div>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="password" class="form-control" name="password" placeholder="设置密码" aria-describedby="sizing-addon1">
+                <span class="input-group-addon" id="sizing-addon4"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+             <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="sizing-addon5"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="password" class="form-control" name="confirmpwd" placeholder="确认密码" aria-describedby="sizing-addon1">
+                <span class="input-group-addon" id="sizing-addon6"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+            <div id="button1">
+                <button type="submit" class="btn-group btn-group-lg">注册</button>
+            </div>
+            <span id="pip">点击“注册”即表示您同意并愿意遵守简书</span>
+            <a href="" id="pip1">用户协议</a><span>和</span><a href="">隐私政策</a>
+
+            <span id="society1">——————<span id="society2">社交账号登录</span>——————</span>
+            <div id="pic">
+                <a href="" style="margin-left:20px; margin-top:14px;"><img src="/static/images/login&register.images/微信.png"></a>
+                <a href="" style="margin-left:20px;"><img src="/static/images/login&register.images/QQ.png"></a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

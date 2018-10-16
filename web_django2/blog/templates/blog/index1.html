@@ -1,0 +1,113 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+{% load static %}
+    <div class="panel-heading">首页</div>
+      <div class="panel-body">
+         <div class="row">
+          {% for at in page.object_list %}
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                  <img src="{% static 'img/cover.png' %}" alt="封面">
+                  <div class="caption">
+                    <h5><a href="{% url 'blog:show_arcticle' at.id %}">{{ at.title |truncatechars:15 }}</a></h5>
+                    <p>
+                        {{at.remark |truncatechars:60 }}
+                    </p>
+                    <p>
+                        <a href="#" >{{at.author.nickname}}</a>
+                        <span>|{{at.publishTime}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            {% empty %}
+            <h2>对不起，目前没有文章！！！ <a href="{% url 'blog:add_article' %}">请发表文章</a></h2>
+            {% endfor %}
+
+          </div>
+
+          <div class="row">
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+
+                  {% if page.has_previous %}
+                   <li>
+                      <a href="/blog/index?pageNow={{page.previous_page_number}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                  {% endif %}
+
+                  {% for p in page.paginator.page_range %}
+                    <li><a href="/blog/index/?pageNow={{p}}">{{p}}</a></li>
+                  {% endfor %}
+
+                   {% if page.has_next %}
+                   <li>
+                       <a href="/blog/index?pageNow={{page.next_page_number}}" aria-label="Next">
+                           <span aria-hidden="true">&raquo;</span>
+                       </a>
+                    </li>
+                  {% endif %}
+
+              </ul>
+            </nav>
+          </div>
+
+
+      </div>
+    </div>
+
+
+
+    <script>
+
+//        var cookie = document.cookie
+//        console.log(cookie)
+
+
+//        function sendajax() {
+//            // 1、获取对象
+//            var xhr = new XMLHttpRequest();
+//            // 2、open
+//            xhr.open("GET", "/blog/ajax_hello/", true);
+//            // 监听事件
+//            xhr.onreadystatechange = function () {
+//                // 接受服务器返回的参数
+//                if (xhr.readyState == 4 && xhr.status == 200) {
+//                    console.log(xhr.responseText)
+//                }
+//            }
+////            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//            // send
+//            xhr.send("id=3&name=ljh");
+//        }
+
+        /**
+         * 如果django的视图函数不忽略csrf验证，那么ajax的post，必须携带crsf验证的校验码
+         *  data: {"csrfmiddlewaretoken": "{{ crsf_token }}"}
+         *  注意：此时ajax不能写在独立js文件里面，必须写在模板中
+         *
+         */
+        function sendajax() {
+            $.ajax({
+                url: "/blog/ajax_hello/",
+                method: "POST",
+                data: {"id": 1, "name": "刘帅帅", "csrfmiddlewaretoken": '{{ csrf_token }}' },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                }
+            })
+        }
+
+
+//        console.log("{{csrf_token}}")
+
+    </script>
+
+{% endblock %}

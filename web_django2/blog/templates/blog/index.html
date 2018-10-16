@@ -1,0 +1,133 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+{% load static %}
+    <div class="panel-heading">首页===={{request.COOKIES.username}}</div>
+      <div class="panel-body">
+         <div class="row">
+             <!--手写分页获取文章-->
+          {% for at in articles %}
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                  <img src="{% static 'img/cover.png' %}" alt="封面">
+                  <div class="caption">
+                    <h4><a href="{% url 'blog:show_arcticle' at.id %}">{{ at.title |truncatechars:20 }}</a></h4>
+                    <p>
+                        {{at.remark |truncatechars:50 |safe }}
+                        <!--{{at.content |truncatechars:50 |safe }}-->
+                    </p>
+                    <p>
+                        <a href="#" >{{at.author.nickname}}</a>
+                        <span>|{{at.publishTime}}</span>
+                    </p>
+                    <p>
+                        <a href="{% url 'blog:update_article' at.id %}">修改</a>
+                        <a href="{% url 'blog:delete_article' at.id %}">删除</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            {% empty %}
+            <h2>对不起，目前没有文章！！！ <a href="{% url 'blog:add_article' %}">请发表文章</a></h2>
+            {% endfor %}
+
+
+              </div>
+          <div class="row">
+              <nav aria-label="Page navigation" class="col-md-offset-3 col-md-9">
+                  <ul class="pagination">
+                    <li>
+                      <a href="/blog/index/?pageNow=1">
+                        首页
+                      </a>
+                    </li>
+                    {% if pageNow > 1 %}
+                    <li>
+                      <a href="/blog/index/?pageNow={{ pageNow|add:'-1' }}">
+                        上一页
+                      </a>
+                    </li>
+                    {% endif %}
+
+                  {% for page in page_range %}
+                      {% if page == pageNow %}
+                        <li class="active">
+                          <a href="/blog/index/?pageNow={{page}}" >
+                            {{ page }}
+                          </a>
+                        </li>
+                      {% elif page >= pageNow|add:'-2'  and page <= pageNow|add:'2' %}
+                      <!--or page == 5 == pageNow|add:'4' or page == pageCount == pageNow|add:'-4' -->
+                        <li>
+                          <a href="/blog/index/?pageNow={{page}}" >
+                            {{ page }}
+                          </a>
+                        </li>
+                      {% endif %}
+                  {% endfor %}
+
+                    {% if pageNow < pageCount %}
+                    <li>
+                      <a href="/blog/index/?pageNow={{ pageNow|add:'1' }}">
+                        下一页
+                      </a>
+                    </li>
+                    {% endif %}
+                      <li>
+                        <a href="/blog/index/?pageNow={{pageCount}}">尾页</a>
+                    </li>
+
+                  </ul>
+              </nav>
+          </div>
+
+
+      </div>
+    </div>
+
+    <script>
+        var cookie = document,cookie
+        console.log(cookie)
+
+        //        function sendajax() {
+//            // 1、获取对象
+//            var xhr = new XMLHttpRequest();
+//            // 2、open
+//            xhr.open("GET", "/blog/ajax_hello/", true);
+//            // 监听事件
+//            xhr.onreadystatechange = function () {
+//                // 接受服务器返回的参数
+//                if (xhr.readyState == 4 && xhr.status == 200) {
+//                    console.log(xhr.responseText)
+//                }
+//            }
+////            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//            // send
+//            xhr.send("id=3&name=ljh");
+//        }
+
+        /**
+         * 如果django的视图函数不忽略csrf验证，那么ajax的post，必须携带crsf验证的校验码
+         *  data: {"csrfmiddlewaretoken": "{{ crsf_token }}"}
+         *  注意：此时ajax不能写在独立js文件里面，必须写在模板中
+         *
+         */
+        function sendajax() {
+            $.ajax({
+                url: "/blog/ajax_hello/",
+                method: "POST",
+                data: {"id": 1, "name": "刘帅帅", "csrfmiddlewaretoken": '{{ csrf_token }}' },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                }
+            })
+        }
+
+
+//        console.log("{{csrf_token}}")
+    </script>
+{% endblock %}

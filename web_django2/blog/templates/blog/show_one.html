@@ -1,0 +1,39 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+{% load static %}
+    <div class="panel-heading">自己发表的文章</div>
+      <div class="panel-body">
+         <div class="row">
+          {# {% for at in request.session.loginUser.article_set.all %} #}
+             {# 第二种方法 #}
+              {% for at in articles %}
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                  <img src="{% static 'img/cover.png' %}" alt="封面">
+                  <div class="caption">
+                    <h4><a href="{% url 'blog:show_arcticle' at.id %}">{{ at.title |truncatechars:20 }}</a></h4>
+                    <p>
+                        {{at.content |truncatechars:50 }}
+                    </p>
+                    <p>
+                        <a href="#" >{{at.author.nickname}}</a>
+                        <span>|{{at.publishTime}}</span>
+                    </p>
+                    <p>
+                        <a href="{% url 'blog:update_article' at.id %}">修改</a>
+                        <a href="{% url 'blog:delete_article' at.id %}">删除</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            {% empty %}
+            <h2>对不起，目前没有文章！！！ <a href="{% url 'blog:add_article' %}">请发表文章</a></h2>
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+{% endblock %}
